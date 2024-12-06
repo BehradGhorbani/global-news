@@ -1,9 +1,10 @@
 import {injectable} from 'inversify';
-import {Db, Collection, InsertOneResult} from 'mongodb';
-import {IUserRepository} from "../types/user.interface";
+import {Collection} from 'mongodb';
+import {IMongoUser, IUserRepository} from "../types/user.interface";
 import {MongoDbClient} from "../../db/db.service";
 import {UserModel} from "../model/user.model";
 import {SignupUserDto} from "../dto/signup-user.dto";
+import {NewsModel} from "../../news/model/news.model";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -24,6 +25,21 @@ export class UserRepository implements IUserRepository {
     }
 
     async getUserByEmail(email: string): Promise<UserModel | null> {
-        return await this.collection.findOne<UserModel>({email});
+        const user = await this.collection.findOne<IMongoUser>({email});
+
+        if (!user) return null;
+
+        return this.mongoDataAdapter(user);
+    }
+
+    mongoDataAdapter(param: IMongoUser): NewsModel {
+        return new UserModel(
+            param._id.toString(),
+            param.name,
+            param.email,
+            param.password,
+            param.createdAt,
+            param.updatedAt
+        )
     }
 }

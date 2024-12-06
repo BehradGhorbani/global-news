@@ -55,7 +55,7 @@ export class UserService {
         const jwtExpiresAt = Number(process.env.JWT_EXPIRES_AT);
 
         const accessToken = await this.authService.signToken({
-            id: user._id,
+            id: user.id,
             email: user.email,
             expiresAt: jwtExpiresAt,
         });
