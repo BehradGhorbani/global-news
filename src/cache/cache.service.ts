@@ -18,4 +18,8 @@ export class CacheService {
     get client(): Redis{
         return this._client;
     }
+
+    disconnect(): void{
+        this.client.disconnect();
+    }
 }
