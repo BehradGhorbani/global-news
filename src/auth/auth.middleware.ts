@@ -32,7 +32,7 @@ export class AuthMiddleware implements ExpressMiddlewareInterface {
 
             next();
         } catch (error: any) {
-            res.status(401).json({ error: 'Unauthorized', message: error.message});
+            res.status(401).json(error);
         }
     }
 }
