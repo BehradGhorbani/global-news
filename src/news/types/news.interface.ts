@@ -9,3 +9,13 @@ export interface INewsRepository {
     updateNews(param: UpdateNewsDto): Promise<boolean>;
     deleteNews(id: string, userId: string): Promise<boolean>;
 }
+
+export interface IMongoNews{
+    _id: Buffer,
+    title: string,
+    content: string,
+    userId: string,
+    isDeleted: boolean,
+    createdAt: Date,
+    updatedAt: Date,
+}

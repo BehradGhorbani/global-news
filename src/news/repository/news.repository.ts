@@ -3,7 +3,7 @@ import {Db, Collection, InsertOneResult, ObjectId} from 'mongodb';
 import {MongoDbClient} from "../../db/db.service";
 import {NewsModel} from "../model/news.model";
 import {UpdateNewsDto} from "../dto/update-news.dto";
-import {INewsRepository} from "../types/news.interface";
+import {IMongoNews, INewsRepository} from "../types/news.interface";
 import {CreateNewsDto} from "../dto/create-news.dto";
 
 @injectable()
@@ -48,38 +48,34 @@ export class NewsRepository implements INewsRepository {
     }
 
     async getAllNews(): Promise<any> {
-        const news = await this.collection.find({isDeleted: false}).toArray();
+        const news = await this.collection.find<IMongoNews>({isDeleted: false}).toArray();
 
         if (!news || news.length === 0) {
             return []
         }
 
         return news.map(news => {
-            return {
-                id: news._id.toString(),
-                title: news.title,
-                content: news.content,
-                userId: news.userId,
-                isDeleted: news.isDeleted,
-                createdAt: news.createdAt,
-                updatedAt: news.updatedAt,
-            }
+            return this.mongoDataAdapter(news)
         });
     }
 
     async getNewsById(id: string): Promise<any | null> {
-        const news =  await this.collection.findOne({_id: new ObjectId(id), isDeleted: false});
+        const news =  await this.collection.findOne<IMongoNews>({_id: new ObjectId(id), isDeleted: false});
 
         if (!news) return null;
 
-        return  {
-            id: news._id.toString(),
-            title: news.title,
-            content: news.content,
-            userId: news.userId,
-            isDeleted: news.isDeleted,
-            createdAt: news.createdAt,
-            updatedAt: news.updatedAt,
-        }
+        return this.mongoDataAdapter(news)
+    }
+
+    mongoDataAdapter(param: IMongoNews): NewsModel {
+        return new NewsModel(
+            param._id.toString(),
+            param.title,
+            param.content,
+            param.isDeleted,
+            param.userId,
+            param.createdAt,
+            param.updatedAt
+        )
     }
 }

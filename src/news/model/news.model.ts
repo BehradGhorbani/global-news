@@ -1,13 +1,17 @@
 export class NewsModel {
-    _id?: string
+    constructor(
+    public id?: string,
 
-    title?: string
+    public title?: string,
 
-    content?: string
+    public content?: string,
 
-    isDeleted?: boolean
+    public isDeleted?: boolean,
 
-    createdAt?: Date
+    public userId?: string,
 
-    updatedAt?: Date
+    public createdAt?: Date,
+
+    public updatedAt?: Date)
+    {}
 }
