@@ -1,5 +1,4 @@
 import {UpdateNewsDto} from "../dto/update-news.dto";
-import {Request} from "express";
 import 'reflect-metadata';
 import {inject} from "inversify";
 import {
@@ -12,7 +11,6 @@ import {
     Post,
     Put,
     Req,
-    UseBefore
 } from "routing-controllers";
 import {NewsService} from "../service/news.service";
 import {CreateNewsDto} from "../dto/create-news.dto";

@@ -67,7 +67,9 @@ export class UserService {
         };
     }
 
-    async logout(token: string): Promise<void> {
-        await this.cacheService.client.del(token);
+    async logout(token: string): Promise<boolean> {
+        const result = await this.cacheService.client.del(token);
+
+        return !!result
     }
 }

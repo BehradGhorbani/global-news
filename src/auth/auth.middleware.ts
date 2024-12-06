@@ -20,14 +20,14 @@ export class AuthMiddleware implements ExpressMiddlewareInterface {
 
                 const token = authHeader.replace('Bearer ', '');
 
-                const decodedData = await this.authService.verifyToken(token);
                 const session = await this.cacheService.client.get(token);
 
-                if (!decodedData || !session) {
-                    throw new UnauthorizedError()
+                if (!session) {
+                    throw new UnauthorizedError('Token is Invalid Or Expired!')
                 }
 
-                req.user = decodedData;
+                req.headers.authorization = token;
+                req.user = session;
             }
 
             next();
